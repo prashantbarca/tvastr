@@ -9,14 +9,14 @@ module Tvastr
     end
 
     def self.parser name, &block
-        File.open(Tvastr.get_file, 'a') do |file|
-            file.write("#{name} = " + Tvastr::Base.new.instance_eval(&block)[0] + "\n")
-        end
+      File.open(Tvastr.get_file, 'a') do |file|
+        file.write("#{name} = " + Tvastr::Base.new.instance_eval(&block)[0] + "\n")
+      end
     end
 
     # bits
     def bits name, num, bool, *options
-      if num.class == Integer and !!bool == bool
+      if num.class == Integer && !!bool == bool
         if bool
           boo = "true"
         else
@@ -31,7 +31,7 @@ module Tvastr
 
     # TODO add check for int_type
     def int_range name, int_type, i1, i2, *options
-      if i1.class == Integer and i2.class == Integer
+      if i1.class == Integer && i2.class == Integer
         add_options("h.int_range(" + int_type + ',' + i1.to_s + ", " + i2.to_s  + ")")
         # Hammer::Parser.int_range(i1, i2)
       end
@@ -123,24 +123,24 @@ module Tvastr
     def xor name, arg1, arg2, *options
       add_options("h.choice(" + arg1 + ", " + arg2 + ")", options)
     end
-    
+
     # add options if they were given as args
     def add_options string, options
-        options.each do |option|
-            if option == 'many'
-                string = "h.many(" + string + ")"
-            elsif option == 'optional'
-                string = "h.optional(" + string + ")"
-            elsif option == 'many1'
-                string = "h.many1(" + string + ")"
-            end 
-        end
-        string
+      options.each do |option|
+        if option == 'many'
+          string = "h.many(" + string + ")"
+        elsif option == 'optional'
+          string = "h.optional(" + string + ")"
+        elsif option == 'many1'
+          string = "h.many1(" + string + ")"
+        end 
+      end
+      string
     end
-    
+
     #
     def sequence name, *options, &block
-      unless block_given? and name.class == String
+      unless block_given? && name.class == String
         raise TypeError
       end
       sequence_input = "h.sequence("
