@@ -1,0 +1,42 @@
+module HammerComposer
+
+  #
+  def optional
+    'optional'
+  end
+
+
+  #
+  def many1
+    'many1'
+  end
+
+  #
+  def many
+    'many'
+  end
+
+  # takes a list of args, and says if it has many, optional, etc.
+  # preserve sequence
+  # many(sequence) != sequence(many)
+  def has_an_option list_of_options
+    if list_of_options.empty?
+      return nil
+    else
+      if list_of_options[0] == 'many'
+        return "many(" + has_an_option(list_of_options[1,]).to_s + ")"
+      elsif list_of_options[0] == 'many1'
+        return "many1(" + has_an_option(list_of_options[1,]).to_s + ")"
+      elsif list_of_options[0] == 'optional'
+        return "optional(" + has_an_option(list_of_options[1,]).to_s + ")"
+      end
+    end
+  end
+  
+  #
+  def sequence name, *args, &block
+    unless block_given? and name.class == String
+      raise TypeError
+    end
+  end
+end

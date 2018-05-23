@@ -1,0 +1,2 @@
+sequence "name1" do
+  uint8 "name2", many1

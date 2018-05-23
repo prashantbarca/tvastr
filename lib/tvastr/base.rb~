@@ -1,0 +1,123 @@
+module HammerComposer
+  # Base
+  class Base
+    attr_accessor :parse_tree
+
+    # Constructor
+    def initialize
+      @parse_tree = []
+    end
+
+    # bits
+    def bits num, bool
+      if num.class == Integer and !!bool == bool
+        if bool
+          boo = "true"
+        else
+          boo = "false"
+        end
+        "h_bits(" + num.to_s + ", #{boo}" + ")"
+      # Hammer::Parser.bits(num, bool)
+      else
+        raise TypeError
+      end
+    end
+
+    #
+    def int_range i1, i2
+      puts "int_range"
+      if i1.class == Integer and i2.class == Integer
+        @parse_tree.push "h_int_range(" + i1.to_s + ", " + i2.to_s  + ")"
+        # Hammer::Parser.int_range(i1, i2)
+      end
+    end
+
+    #
+    def ch c1
+      if c1.class != String || c1.length != 1
+        raise TypeError
+      end
+      # Hammer::Parser.ch(c1)
+      "h_ch('" + c1  + "')"
+    end
+
+    #
+    def ch_range name, c1, c2
+
+      if name.class != String
+        raise TypeError
+      end
+
+      if c1.class != String || c1.length != 1
+        raise TypeError
+      end
+
+      if c2.class != String || c2.length != 1
+        raise TypeError
+      end
+
+      # Hammer::Parser.ch_range(c1, c2)
+      "h_ch_range('" + c1 + "', '" + c2 + "')"
+    end
+
+    #
+    def uint8
+      # Hammer::Parser.uint8()
+      "h_uint8()"
+    end
+
+    #
+    def uint16
+      # Hammer::Parser.uint16()
+      "h_uint16()"
+    end
+
+    #
+    def uint32
+      # Hammer::Parser.uint32()
+      "h_uint32()"
+    end
+
+    #
+    def uint64
+      # Hammer::Parser.uint64()
+      "h_uint64()"
+    end
+
+    #
+    def int8
+      # Hammer::Parser.int8()
+      "h_int8()"
+    end
+
+    #
+    def int16
+      # Hammer::Parser.int16()
+      "h_int16()"
+    end
+
+    #
+    def int32
+      # Hammer::Parser.int32()
+      "h_int32()"
+    end
+
+    #
+    def int64
+      # Hammer::Parser.int64()
+      "h_int64()"
+    end
+
+    # Token
+    def token string
+      "h_token(\"" + string + "\", " + string.length.to_s + ")"
+      # Hammer::Parser.token(string)
+    end
+
+    # xor
+    def xor arg1, arg2
+      "h_choice(" + arg1 + ", " + arg2 + ")"
+    end
+
+  end
+end

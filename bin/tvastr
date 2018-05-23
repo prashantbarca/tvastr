@@ -1,0 +1,45 @@
+#!/usr/bin/env ruby
+require 'bundler/setup'
+require 'tvastr'
+
+include Tvastr
+
+# If command line argument not given, or file not present
+if ARGV[0] == nil
+    puts 'Argument or File not found'
+    puts 'Usage: tvastr <input-filename> <output-filename> <options>'
+    exit
+elsif !File.exists?(File.expand_path(ARGV[0]))
+    puts 'File not found'
+    puts 'Usage: tvastr <input-filename> <output-filename> <options>'  
+	exit
+end
+
+if ARGV[1] == nil
+    puts 'Argument or File not found'
+    puts 'Usage: tvastr <input-filename> <output-filename> <options>'  
+    exit
+elsif File.exists?(File.expand_path(ARGV[1]))
+    puts "#{ARGV[1]}: file already exists"
+    puts 'Usage: tvastr <input-filename> <output-filename> <options>'  
+	exit
+end
+
+# Create the output directory if it doesn't exist already
+filedir = Dir.pwd + "/hammer-output"
+unless File.exists?(filedir)
+    Dir.mkdir(filedir)
+end
+
+file = File.open(ARGV[0], 'rb')
+
+final_input = ""
+while (line = file.gets)
+    final_input = final_input + line
+end
+base = Tvastr::Base
+Tvastr.put_file(ARGV[1])
+File.open(Tvastr.get_file, 'a') do |file|
+	file.write("import hammer as h\n")
+end
+result = base.instance_eval(final_input)
