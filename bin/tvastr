@@ -34,6 +34,6 @@ end
 base = Tvastr::Base
 Tvastr.put_file(ARGV[1])
 File.open(Tvastr.get_file, 'a') do |file|
-  file.write('import hammer as h\n')
+  file.write("import hammer as h\n")
 end
 base.instance_eval(final_input)

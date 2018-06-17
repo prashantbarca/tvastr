@@ -22,7 +22,7 @@ module Tvastr
         else
           boo = "false"
         end
-        add_options("h.bits(" + num.to_s + ", #{boo}" + ")")
+        parse_tree.append(add_options("h.bits(" + num.to_s + ", #{boo}" + ")"))
       # Hammer::Parser.bits(num, bool)
       else
         raise TypeError
@@ -32,7 +32,7 @@ module Tvastr
     # TODO add check for int_type
     def int_range name, int_type, i1, i2, *options
       if i1.class == Integer && i2.class == Integer
-        add_options("h.int_range(" + int_type + ',' + i1.to_s + ", " + i2.to_s  + ")")
+        parse_tree.append(add_options("h.int_range(" + int_type + ',' + i1.to_s + ", " + i2.to_s  + ")"))
         # Hammer::Parser.int_range(i1, i2)
       end
     end
@@ -43,7 +43,7 @@ module Tvastr
         raise TypeError
       end
       # Hammer::Parser.ch(c1)
-      add_options("h.ch('" + c1  + "')", options)
+      parse_tree.append(add_options("h.ch('" + c1  + "')", options))
     end
 
     #
@@ -62,7 +62,7 @@ module Tvastr
       end
 
       # Hammer::Parser.ch_range(c1, c2)
-      add_options("h.ch_range('" + c1 + "', '" + c2 + "')", options)
+      parse_tree.append(add_options("h.ch_range('" + c1 + "', '" + c2 + "')", options))
     end
 
     #
@@ -80,42 +80,42 @@ module Tvastr
     #
     def uint32 name, *options
       # Hammer::Parser.uint32()
-      add_options("h.uint32()", options)
+      parse_tree.append(add_options("h.uint32()", options))
     end
 
     #
     def uint64 name, *options
       # Hammer::Parser.uint64()
-      add_options("h.uint64()", options)
+      parse_tree.append(add_options("h.uint64()", options))
     end
 
     #
     def int8 name, *options
       # Hammer::Parser.int8()
-      add_options("h.int8()", options)
+      parse_tree.append(add_options("h.int8()", options))
     end
 
     #
     def int16 name, *options
       # Hammer::Parser.int16()
-      add_options("h.int16()", options)
+      parse_tree.append(add_options("h.int16()", options))
     end
 
     #
     def int32 name, *options
       # Hammer::Parser.int32()
-      add_options("h.int32()", options)
+      parse_tree.append(add_options("h.int32()", options))
     end
 
     #
     def int64 name, *options
       # Hammer::Parser.int64()
-      add_options("h.int64()", options)
+      parse_tree.append(add_options("h.int64()", options))
     end
 
     # Token
     def token name, string, *options
-      add_options("h.token(\"" + string + "\", " + string.length.to_s + ")", options)
+      parse_tree.append(add_options("h.token(\"" + string + "\")", options))
       # Hammer::Parser.token(string)
     end
 
@@ -136,6 +136,21 @@ module Tvastr
         end 
       end
       string
+    end
+
+    def choice name, *options, &block
+      unless block_given? && name.class == String
+        raise TypeError
+      end
+      choice_input = "h.choice(\n"
+      tmp = Tvastr::Base.new
+      tmp.instance_eval(&block)
+      for val in tmp.parse_tree
+        choice_input = choice_input + val + ",\n"
+      end
+      choice_input[-2] = ")"
+      parse_tree.append(add_options(choice_input, options))
+      parse_tree
     end
 
     #

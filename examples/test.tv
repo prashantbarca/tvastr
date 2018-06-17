@@ -1,19 +1,7 @@
-parser 'abcd' do
-	sequence "name1" do
-		uint8 "name2", many1
-		uint16 "name2", many
-		sequence "name3" do
-			uint8 "name4"
-		end
-	end
-end
-
-parser 'efgh' do
-	sequence "name1" do
-		uint8 "name2", many1
-		uint16 "name2", many
-		sequence "name3" do
-			uint8 "name4"
-		end
+parser "signals" do
+	choice "signal_choices" do
+		token "signal1", "hmi.signal1"
+		token "signal2", "hmi.signal2"
+		token "signal3", "hmi.signal3"
 	end
 end
